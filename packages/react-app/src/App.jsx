@@ -25,7 +25,7 @@ import { formatEther, parseEther } from "@ethersproject/units";
 import { Hints, ExampleUI, Subgraph } from "./views";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { INFURA_ID, DAI_ADDRESS, DAI_ABI, NETWORK, NETWORKS } from "./constants";
-import { CreateTransaction, Transactions, Owners, FrontPage } from "./views";
+import { Fund, CreateTransaction, Transactions, Owners, FrontPage } from "./views";
 
 /*
     Welcome to 🏗 scaffold-eth !
@@ -298,7 +298,7 @@ function App(props) {
               // disabled
               onClick={() => setRoute("/")}
             >
-              <Link to="/">View / Modify</Link>
+              <Link to="/">View</Link>
             </Button>
           </Menu.Item>
           <Menu.Item key="/owners">
@@ -310,7 +310,7 @@ function App(props) {
               // disabled
               onClick={() => setRoute("/owners")}
             >
-              <Link to="/owners">Owners</Link>
+              <Link to="/owners">Modify</Link>
             </Button>
           </Menu.Item>
           <Menu.Item key="/create">
@@ -325,6 +325,30 @@ function App(props) {
               <Link to="/create">Create</Link>
             </Button>
           </Menu.Item>
+          <Menu.Item key="/fund">
+            <Button
+              type="default"
+              shape="round"
+              size="large"
+              style={{ marginLeft: 10 }}
+              // disabled
+              onClick={() => setRoute("/fund")}
+            >
+              <Link to="/fund">Fund</Link>
+            </Button>
+          </Menu.Item>
+          <Menu.Item key="/pool">
+            <Button
+              type="default"
+              shape="round"
+              size="large"
+              style={{ marginLeft: 10 }}
+              // disabled
+              onClick={() => setRoute("/pool")}
+            >
+              <Link to="/pool">Sign</Link>
+            </Button>
+          </Menu.Item>
           {/* <Menu.Item key="/pool">
             <Link
               onClick={() => {
@@ -334,7 +358,7 @@ function App(props) {
             >
               Pool
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/debug">
             <Link
               onClick={() => {
@@ -344,7 +368,7 @@ function App(props) {
             >
               Debug
             </Link>
-          </Menu.Item> */}
+          </Menu.Item>
         </Menu>
 
         <Switch>
@@ -458,6 +482,24 @@ function App(props) {
               tx={tx}
               writeContracts={writeContracts}
               mainnetProvider={mainnetProvider}
+            />
+          </Route>
+          <Route path="/fund">
+            <Fund
+              contractName={contractName}
+              address={address}
+              userProvider={userProvider}
+              mainnetProvider={mainnetProvider}
+              localProvider={localProvider}
+              yourLocalBalance={yourLocalBalance}
+              price={price}
+              tx={tx}
+              writeContracts={writeContracts}
+              readContracts={readContracts}
+              blockExplorer={blockExplorer}
+              nonce={nonce}
+              ownerEvents={ownerEvents}
+              signaturesRequired={signaturesRequired}
             />
           </Route>
         </Switch>

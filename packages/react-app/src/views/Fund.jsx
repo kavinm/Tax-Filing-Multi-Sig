@@ -37,10 +37,11 @@ export default function Owners({
   return (
     <div>
       <h2 style={{ marginTop: 32 }}>
-        Signatures Required: {signaturesRequired ? signaturesRequired.toNumber() : <Spin></Spin>}
+        {/* Signatures Required: {signaturesRequired ? signaturesRequired.toNumber() : <Spin></Spin>} */}
+        Ensure your wallet is connected and press Fund Agreement.
       </h2>
-      <List
-        style={{ maxWidth: 400, margin: "auto", marginTop: 32, borderRadius: 8 }}
+      {/* <List
+        style={{ maxWidth: 400, margin: "auto", marginTop: 32 }}
         bordered
         dataSource={ownerEvents}
         renderItem={item => {
@@ -51,18 +52,25 @@ export default function Owners({
             </List.Item>
           );
         }}
-      />
+      /> */}
 
       <div
-        style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64, borderRadius: 8 }}
+        style={{
+          border: "1px solid #cccccc",
+          padding: 16,
+          width: "60%",
+          margin: "auto",
+          marginTop: 32,
+          borderRadius: 8,
+        }}
       >
-        <div style={{ margin: 8, padding: 8 }}>
+        {/* <div style={{ margin: 8, padding: 8 }}>
           <Select value={methodName} style={{ width: "100%" }} onChange={setMethodName}>
             <Option key="addSigner">addSigner()</Option>
             <Option key="removeSigner">removeSigner()</Option>
           </Select>
-        </div>
-        <div style={{ margin: 8, padding: 8 }}>
+        </div> */}
+        {/* <div style={{ margin: 8, padding: 8 }}>
           <AddressInput
             autoFocus
             ensProvider={mainnetProvider}
@@ -80,25 +88,31 @@ export default function Owners({
               setNewSignaturesRequired(e.target.value);
             }}
           />
-        </div>
+        </div> */}
         <div style={{ margin: 8, padding: 8 }}>
+          <h3>
+            {/* Signatures Required: {signaturesRequired ? signaturesRequired.toNumber() : <Spin></Spin>} */}
+            Amount: $XXX
+          </h3>
           <Button
             onClick={() => {
-              console.log("METHOD", setMethodName);
-              let calldata = readContracts[contractName].interface.encodeFunctionData(methodName, [
-                newOwner,
-                newSignaturesRequired,
-              ]);
-              console.log("calldata", calldata);
-              setData(calldata);
-              setAmount("0");
-              setTo(readContracts[contractName].address);
-              setTimeout(() => {
-                history.push("/create");
-              }, 777);
+              alert("Fund Agreement");
+              // alert({ message: "Yolo" });
+              // console.log("METHOD", setMethodName);
+              // let calldata = readContracts[contractName].interface.encodeFunctionData(methodName, [
+              //   newOwner,
+              //   newSignaturesRequired,
+              // ]);
+              // console.log("calldata", calldata);
+              // setData(calldata);
+              // setAmount("0");
+              // setTo(readContracts[contractName].address);
+              // setTimeout(() => {
+              //   history.push("/create");
+              // }, 777);
             }}
           >
-            Create Tx
+            Fund Agreement
           </Button>
         </div>
       </div>
