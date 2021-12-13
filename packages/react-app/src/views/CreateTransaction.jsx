@@ -35,6 +35,8 @@ export default function CreateTransaction({
 
   const [customNonce, setCustomNonce] = useState();
   const [to, setTo] = useLocalStorage("to");
+  const [to1, setTo1] = useLocalStorage("to1");
+  const [to2, setTo2] = useLocalStorage("to2");
   const [amount, setAmount] = useLocalStorage("amount", "0");
   const [data, setData] = useLocalStorage("data", "0x");
   const [isCreateTxnEnabled, setCreateTxnEnabled] = useState(true);
@@ -53,21 +55,24 @@ export default function CreateTransaction({
     const inputTimer = setTimeout(async () => {
       console.log("EFFECT RUNNING");
       try {
-        if(methodName == "transferFunds"){
-          console.log("Send transaction selected")
-          console.log("🔥🔥🔥🔥🔥🔥",amount)
-            const calldata = readContracts[contractName].interface.encodeFunctionData("transferFunds",[to,parseEther("" + parseFloat(amount).toFixed(12))])
-            setData(calldata);  
+        if (methodName == "transferFunds") {
+          console.log("Send transaction selected");
+          console.log("🔥🔥🔥🔥🔥🔥", amount);
+          const calldata = readContracts[contractName].interface.encodeFunctionData("transferFunds", [
+            to,
+            parseEther("" + parseFloat(amount).toFixed(12)),
+          ]);
+          setData(calldata);
         }
         decodedDataObject = readContracts ? await readContracts[contractName].interface.parseTransaction({ data }) : "";
         console.log("decodedDataObject", decodedDataObject);
         setCreateTxnEnabled(true);
-        if(decodedDataObject.signature === "addSigner(address,uint256)"){
-          setMethodName("addSigner")
-          setSelectDisabled(true)
-        } else if (decodedDataObject.signature === "removeSigner(address,uint256)"){
-          setMethodName("removeSigner")
-          setSelectDisabled(true)
+        if (decodedDataObject.signature === "addSigner(address,uint256)") {
+          setMethodName("addSigner");
+          setSelectDisabled(true);
+        } else if (decodedDataObject.signature === "removeSigner(address,uint256)") {
+          setMethodName("removeSigner");
+          setSelectDisabled(true);
         }
         decodedData = (
           <div>
@@ -99,7 +104,17 @@ export default function CreateTransaction({
                 if (element.type === "uint256") {
                   return (
                     <p style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "left" }}>
-                  {element.name === "value" ? <><b>{element.name} : </b> <Balance fontSize={16} balance={decodedDataObject.args[index]} dollarMultiplier={price} /> </> : <><b>{element.name} : </b> {decodedDataObject.args[index] && decodedDataObject.args[index].toNumber()}</>}
+                      {element.name === "value" ? (
+                        <>
+                          <b>{element.name} : </b>{" "}
+                          <Balance fontSize={16} balance={decodedDataObject.args[index]} dollarMultiplier={price} />{" "}
+                        </>
+                      ) : (
+                        <>
+                          <b>{element.name} : </b>{" "}
+                          {decodedDataObject.args[index] && decodedDataObject.args[index].toNumber()}
+                        </>
+                      )}
                     </p>
                   );
                 }
@@ -109,11 +124,9 @@ export default function CreateTransaction({
         setDecodedData(decodedData);
         setCreateTxnEnabled(true);
         setResult();
-
       } catch (error) {
-
-        console.log("mistake: ",error);
-        if(data!== "0x") setResult("ERROR: Invalid calldata");
+        console.log("mistake: ", error);
+        if (data !== "0x") setResult("ERROR: Invalid calldata");
         setCreateTxnEnabled(false);
       }
     }, 500);
@@ -143,9 +156,11 @@ export default function CreateTransaction({
       {/*
         ⚙️ Here is an example UI that displays and sets the purpose in your smart contract:
       */}
-      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+      <div
+        style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64, borderRadius: 8 }}
+      >
         <div style={{ margin: 8 }}>
-          <div style={inputStyle}>
+          {/* <div style={inputStyle}>
             <Input
               prefix="#"
               disabled
@@ -153,28 +168,31 @@ export default function CreateTransaction({
               placeholder={"" + (nonce ? nonce.toNumber() : "loading...")}
               onChange={setCustomNonce}
             />
-          </div>
-                  <div style={{margin:8,padding:8}}>
-          <Select value={methodName} disabled={selectDisabled} style={{ width: "100%" }} onChange={ setMethodName }>
-            <Option key="transferFunds">transferFunds()</Option>
-            <Option disabled={true} key="addSigner">addSigner()</Option>
-            <Option disabled={true} key="removeSigner">removeSigner()</Option>
-          </Select>
-        </div>
+          </div> */}
+          {/* <div style={{ margin: 8, padding: 8 }}>
+            <Select value={methodName} disabled={selectDisabled} style={{ width: "100%" }} onChange={setMethodName}>
+              <Option key="transferFunds">transferFunds()</Option>
+              <Option disabled={true} key="addSigner">
+                addSigner()
+              </Option>
+              <Option disabled={true} key="removeSigner">
+                removeSigner()
+              </Option>
+            </Select>
+          </div> */}
           <div style={inputStyle}>
-            <AddressInput
-              autoFocus
-              ensProvider={mainnetProvider}
-              placeholder="to address"
-              value={to}
-              onChange={setTo}
-            />
+            <AddressInput autoFocus ensProvider={mainnetProvider} placeholder="address" value={to1} onChange={setTo1} />
+          </div>
+          <div style={inputStyle}>
+            <AddressInput autoFocus ensProvider={mainnetProvider} placeholder="address" value={to2} onChange={setTo2} />
           </div>
 
-          {!selectDisabled && <div style={inputStyle}>
-            <EtherInput price={price} mode="USD" value={amount} onChange={setAmount} />
-          </div>}
-          <div style={inputStyle}>
+          {!selectDisabled && (
+            <div style={inputStyle}>
+              <EtherInput price={price} mode="USD" value={amount} onChange={setAmount} />
+            </div>
+          )}
+          {/* <div style={inputStyle}>
             <Input
               placeholder="calldata"
               value={data}
@@ -184,69 +202,70 @@ export default function CreateTransaction({
               ref={calldataInputRef}
             />
             {decodedDataState}
-          </div>
+          </div> */}
 
           <Button
             style={{ marginTop: 32 }}
-            disabled={!isCreateTxnEnabled}
+            disabled={!to1 || !to2}
             onClick={async () => {
+              alert(`Create contract ${to1} ${to2} ${amount}`);
               // setData(calldataInputRef.current.state.value)
               // if (data && data == "0x") {
               //   setResult("ERROR, Call Data Invalid");
               //   return;
               // }
-              console.log("customNonce", customNonce);
-              const nonce = customNonce || (await readContracts[contractName].nonce());
-              console.log("nonce", nonce);
+              // console.log("customNonce", customNonce);
+              // const nonce = customNonce || (await readContracts[contractName].nonce());
+              // console.log("nonce", nonce);
 
-              const newHash = await readContracts[contractName].getTransactionHash(
-                nonce,
-                to,
-                parseEther("" + parseFloat(amount).toFixed(12)),
-                data,
-              );
-              console.log("newHash", newHash);
+              // const newHash = await readContracts[contractName].getTransactionHash(
+              //   nonce,
+              //   to,
+              //   parseEther("" + parseFloat(amount).toFixed(12)),
+              //   data,
+              // );
+              // console.log("newHash", newHash);
 
-              const signature = await userProvider.send("personal_sign", [newHash, address]);
-              console.log("signature", signature);
+              // const signature = await userProvider.send("personal_sign", [newHash, address]);
+              // console.log("signature", signature);
 
-              const recover = await readContracts[contractName].recover(newHash, signature);
-              console.log("recover", recover);
+              // const recover = await readContracts[contractName].recover(newHash, signature);
+              // console.log("recover", recover);
 
-              const isOwner = await readContracts[contractName].isOwner(recover);
-              console.log("isOwner", isOwner);
+              // const isOwner = await readContracts[contractName].isOwner(recover);
+              // console.log("isOwner", isOwner);
 
-              if (isOwner) {
-                const res = await axios.post(poolServerUrl, {
-                  chainId: localProvider._network.chainId,
-                  address: readContracts[contractName].address,
-                  nonce: nonce.toNumber(),
-                  to,
-                  amount,
-                  data,
-                  hash: newHash,
-                  signatures: [signature],
-                  signers: [recover],
-                });
-                // IF SIG IS VALUE ETC END TO SERVER AND SERVER VERIFIES SIG IS RIGHT AND IS SIGNER BEFORE ADDING TY
+              // if (isOwner) {
+              //   const res = await axios.post(poolServerUrl, {
+              //     chainId: localProvider._network.chainId,
+              //     address: readContracts[contractName].address,
+              //     nonce: nonce.toNumber(),
+              //     to,
+              //     amount,
+              //     data,
+              //     hash: newHash,
+              //     signatures: [signature],
+              //     signers: [recover],
+              //   });
+              //   // IF SIG IS VALUE ETC END TO SERVER AND SERVER VERIFIES SIG IS RIGHT AND IS SIGNER BEFORE ADDING TY
 
-                console.log("RESULT", res.data);
+              //   console.log("RESULT", res.data);
 
-                setTimeout(() => {
-                  history.push("/pool");
-                }, 2777);
+              //   setTimeout(() => {
+              //     history.push("/pool");
+              //   }, 2777);
 
-                setResult(res.data.hash);
-                setTo();
-                setAmount("0");
-                setData("0x");
-              } else {
-                console.log("ERROR, NOT OWNER.");
-                setResult("ERROR, NOT OWNER.");
-              }
+              //   setResult(res.data.hash);
+              //   setTo();
+              //   setAmount("0");
+              //   setData("0x");
+              // } else {
+              //   console.log("ERROR, NOT OWNER.");
+              //   setResult("ERROR, NOT OWNER.");
+              // }
             }}
           >
-            Create
+            Create Agreement
           </Button>
         </div>
 
