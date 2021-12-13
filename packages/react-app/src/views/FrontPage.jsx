@@ -49,7 +49,7 @@ export default function FrontPage({
           />
         </div>
       </div>
-      <List
+      {/* <List
         bordered
         dataSource={executeTransactionEvents}
         renderItem={item => {
@@ -60,7 +60,7 @@ export default function FrontPage({
             </>
           );
         }}
-      />
+      /> */}
     </div>
   );
 }

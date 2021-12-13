@@ -12,11 +12,29 @@ const main = async () => {
   // 0xbB69eAb3c34A368151277823e36921Fb366EaE1e (ropsten/rinkeby)
   // 0x22d63804D00b4B2BF3dE7Dd21c22aD839E62f920 (meta-wallet)
 
+  // complete via UI
+  // add some UI in the create to handle this
+  // dummy function for now
+  // create w/ address they connected (and asked to add client)
+  // how will the payment be accepted, set the amount
+
+  // button: send to the address via meta mask
+  // view (no modify for now)
+
+  // Sign button (similar to pool) for signing a multisig
+
+  // Sign (Pool) | Fund Buttons (open up meta metamast), add a route for this (2 steps)
   const MetaMultiSigWallet = await deploy("MetaMultiSigWallet", [
     31337,
-    ["0x920D49b9C38EC98cef4a6Af685Cc801eFEEF491c"],
-    1,
+    [
+      // Accountant to add this
+      "0x29caecbf968D2cd0718149C9dF3595932266073C",
+      "0x7f91569c77e55340cF7119126803770Bd32705Be",
+    ],
+    2,
   ]);
+
+  // 0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0;
 
   //const yourContract = await deploy("YourContract") // <-- add in constructor args like line 19 vvvv
 
